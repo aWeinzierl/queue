@@ -7,6 +7,8 @@ The queue implemented here is as fast as it is for an additional reason: it is *
 */
 package queue
 
+import "encoding/json"
+
 // minQueueLen is smallest capacity that queue may have.
 // Must be power of 2 for bitwise modulus: x % n == x & (n - 1).
 const minQueueLen = 16
@@ -99,4 +101,17 @@ func (q *Queue) Remove() interface{} {
 		q.resize()
 	}
 	return ret
+}
+
+//Implements the json marshall method for data types which are supported by the json marshaller.
+func (q *Queue) MarshalJSON() ([]byte, error) {
+	bytes := []byte{}
+	for i := q.head; i <= q.tail; i++ {
+		r, err := json.Marshal(q.buf[i])
+		if err != nil {
+			return nil, err
+		}
+		bytes = append(bytes, r...)
+	}
+	return bytes, nil
 }
