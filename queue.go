@@ -107,7 +107,7 @@ func (q *Queue) Remove() interface{} {
 func (q *Queue) MarshalJSON() ([]byte, error) {
 	bytes := []byte{}
 	for i := q.head; i <= q.tail; i++ {
-		r, err := json.Marshal(q.buf[i])
+		r, err := json.Marshal(q.buf[i&(len(q.buf)-1)])
 		if err != nil {
 			return nil, err
 		}
